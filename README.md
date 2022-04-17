@@ -1,7 +1,10 @@
 # my_gaz_repo
 
 
-
+## Potential clients
+ -> Stephane Nganou Gaz Business
+ -> 1.first Les grands depots de gaz situé à Douala
+ -> 2. roll out into Yaoundé
 
 
 
