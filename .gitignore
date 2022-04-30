@@ -123,3 +123,8 @@ logs/
 # End of https://www.gitignore.io/api/git,maven,intellij+all
 
 *hostkey.ser
+/gaz-repo-api/mvnw
+/gaz-repo-api/HELP.md
+/gaz-repo-api/mvnw.cmd
+/gaz-repo-api/.mvn/wrapper/maven-wrapper.jar
+/gaz-repo-api/.mvn/wrapper/maven-wrapper.properties

@@ -1,0 +1,236 @@
+openapi: 3.0.0
+
+info:
+  title: Configuration Service API
+  description: >
+    API specification for connection between Fleetcards, Fleetcards-management and PAMS to the Configuration Service.
+    For each request we use the optional header X-Correlation-Id to identify all logs to this request.
+  version: 1.0.2
+
+paths:
+  /terminal-status/t/{terminalId}/s/{serialNumber}:
+    get:
+      operationId: getTerminalStatus
+      summary: Returns the status of the terminal.
+      parameters:
+        - name: terminalId
+          description: Identifier of the requested terminal.
+          in: path
+          schema:
+            type: string
+            minLength: 8
+            maxLength: 8
+          required: true
+        - name: serialNumber
+          description: Serial number of the requested terminal.
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Terminal Status (active/blocked) was returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TerminalStatus'
+              examples:
+                OutdoorTerminalResponse:
+                  $ref: '#/components/examples/TerminalStatusActive'
+                IndoorTerminalResponse:
+                  $ref: '#/components/examples/TerminalStatusBlocked'
+        '400':
+          description: Information is missing or invalid.
+        '404':
+          description: No terminal found for the given combination of terminal-id and serial number.
+
+  /terminal/{terminalId}:
+    get:
+      operationId: getTerminalByTerminalId
+      summary: Returns the authoriser to be used for the specified card on the specified terminal.
+      parameters:
+        - name: terminalId
+          description: Identifier of the requested terminal.
+          in: path
+          schema:
+            type: string
+            minLength: 8
+            maxLength: 8
+          required: true
+      responses:
+        '200':
+          description: Ok. Terminal was returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Terminal'
+              examples:
+                OutdoorTerminalResponse:
+                  $ref: '#/components/examples/OutdoorTerminalExample'
+                IndoorTerminalResponse:
+                  $ref: '#/components/examples/IndoorTerminalExample'
+        '400':
+          description: Information is missing or invalid.
+        '404':
+          description: No terminal found for the given id.
+
+
+  /branch/{branchId}:
+    get:
+      deprecated: true
+      operationId: getBranchByBranchId
+      summary: Returns the branch for the given id.
+      parameters:
+        - name: branchId
+          in: path
+          description: Identifier of the requested branch.
+          schema:
+            type: string
+            minLength: 5
+            maxLength: 5
+          required: true
+      responses:
+        '200':
+          description: Ok. Branch was returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+              examples:
+                IndoorBranch:
+                  $ref: '#/components/examples/IndoorBranchExample'
+                OutdoorBranch:
+                  $ref: '#/components/examples/OutdoorBranchExample'
+
+        '400':
+          description: Information is missing or invalid.
+        '404':
+          description: No branch found for the given id.
+
+
+  /branch/{branchId}/merchant/{merchantId}:
+    get:
+      operationId: getBranchByBranchIdAndMerchantId
+      summary: Returns the branch for the given id.
+      parameters:
+        - name: branchId
+          in: path
+          description: Identifier of the requested branch.
+          schema:
+            type: string
+            minLength: 5
+            maxLength: 5
+          required: true
+        - name: merchantId
+          in: path
+          description: Identifier of the merchant for the requested branch.
+          schema:
+            type: string
+            minLength: 5
+            maxLength: 5
+          required: true
+      responses:
+        '200':
+          description: Ok. Branch was returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+              examples:
+                IndoorBranch:
+                  $ref: '#/components/examples/IndoorBranchExample'
+                OutdoorBranch:
+                  $ref: '#/components/examples/OutdoorBranchExample'
+
+        '400':
+          description: Information is missing or invalid.
+        '404':
+          description: No branch found for the given id.
+
+components:
+  schemas:
+    Branch:
+      properties:
+        branchId:
+          type: string
+        country:
+          type: string
+        merchantId:
+          type: string
+        merchantDebNumber:
+          type: string
+        vuNumber:
+          type: string
+        debtorNumber:
+          type: string
+        categoryIndicator:
+          type: integer
+        address:
+          $ref: '#/components/schemas/Address'
+
+    Terminal:
+      properties:
+        terminalId:
+          type: string
+        branch:
+          $ref: '#/components/schemas/Branch'
+        supportedCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportedCard'
+
+    TerminalStatus:
+      properties:
+        status:
+          type: string
+          description: Status of the terminal.
+          example: ACTIVE
+          enum:
+            - ACTIVE
+            - BLOCKED
+
+    Address:
+      properties:
+        street:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+
+    SupportedCard:
+      properties:
+        siteIdIssuer:
+          type: string
+        cardType:
+          $ref: '#/components/schemas/FleetCardType'
+        authoriser:
+          $ref: '#/components/schemas/Authoriser'
+        validFrom:
+          type: string
+        validUntil:
+          type: string
+
+    FleetCardType:
+      type: string
+      enum:
+        - UTA_CARD
+        - DKV_CARD
+        - ESSO_CARD
+        - ESSO_AAFES_CARD
+        - SHELL_CARD
+        - LOGPAY_CARD
+
+    Authoriser:
+      type: string
+      enum:
+        - CTAC
+        - RATIO
+
+  examples:
+    TerminalStatusActive:
+      value:
+        status: 'ACTIVE'
+    TerminalStatusBlocked:
+      value:
+        status: 'BLOCKED'
