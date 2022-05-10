@@ -128,3 +128,6 @@ logs/
 /gaz-repo-api/mvnw.cmd
 /gaz-repo-api/.mvn/wrapper/maven-wrapper.jar
 /gaz-repo-api/.mvn/wrapper/maven-wrapper.properties
+/gaz-repo-dataaccess/mvnw.cmd
+/gaz-repo-dataaccess/mvnw
+/gaz-repo-dataaccess/HELP.md

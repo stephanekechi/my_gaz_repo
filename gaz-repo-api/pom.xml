@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>gaz-repo-api</artifactId>
+	<name>gaz-repo-api</name>
 	<packaging>jar</packaging>
 
 	<build>

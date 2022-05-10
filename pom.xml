@@ -20,6 +20,7 @@
 
     <modules>
         <module>gaz-repo-api</module>
+        <module>gaz-repo-dataaccess</module>
     </modules>
 
 
@@ -27,6 +28,8 @@
         <target.java.version>11</target.java.version>
 
         <spring-boot.version>2.6.7</spring-boot.version>
+
+        <hibernate.version>5.6.8.Final</hibernate.version>
 
         <docker.java.version>11.0.13</docker.java.version>
 
